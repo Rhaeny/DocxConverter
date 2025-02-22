@@ -18,6 +18,8 @@ def convert_pdf2docx(input_directory: str, output_directory: str) -> None:
         converter = Pdf2DocxConverter(path)
         converter.convert_and_save(output_directory_abs)
         converter.move_to_done(done_directory_abs)
+    
+    print("All pdf files converted to docx")
 
 
 def convert_docx2md(input_directory: str, output_directory: str) -> None:
