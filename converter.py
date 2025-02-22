@@ -57,8 +57,18 @@ def convert_pdf2docx(input_directory: str, output_directory: str) -> None:
     print("All pdf files converted to docx")
 
 
+def create_folder_structure():
+    os.makedirs("input", exist_ok=True)
+    os.makedirs("input\\doc", exist_ok=True)
+    os.makedirs("input\\pdf", exist_ok=True)
+    os.makedirs("input\\docx", exist_ok=True)
+
+    print("Folder structure created")
+
+
 
 def main():
+    create_folder_structure()
     convert_doc2docx(input_directory = "input\\doc", output_directory = "input\\docx")
     convert_pdf2docx(input_directory = "input\\pdf", output_directory = "input\\docx")
     convert_docx2md(input_directory = "input\\docx", output_directory = "output")
