@@ -37,8 +37,8 @@ def convert_image(image):
     os.makedirs(output_dir, exist_ok=True)
     
     unique_name = uuid.uuid4()
-    image_path = os.path.join(image_folder, f"image_{unique_name}.png")
-    output_path = os.path.join(output_dir, f"image_{unique_name}.png")
+    image_path = os.path.join(image_folder, f"image-{unique_name}.png")
+    output_path = os.path.join(output_dir, f"image-{unique_name}.png")
     
     with image.open() as image_bytes:
         with open(output_path, 'wb') as f:
