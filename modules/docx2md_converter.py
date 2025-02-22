@@ -7,46 +7,55 @@ from pathlib import Path
 
 
 class Docx2MdConverter:
-    def __init__(self, filepath_abs: str) -> None:
+    def __init__(self, filepath_abs: str, split_output: bool = False) -> None:
         self.filepath_abs = filepath_abs
         self.filename = Path(filepath_abs).stem
+        self.split_output = split_output
+
         with open(filepath_abs, "rb") as docx_file:
-            result = mammoth.convert_to_html(docx_file, convert_image=mammoth.images.img_element(convert_image))
+            result = mammoth.convert_to_html(docx_file, convert_image=mammoth.images.img_element(self.convert_image))
             html = result.value
             self.markdown = markdownify(html)
 
     def save(self, output_directory: str) -> None:
         os.makedirs(output_directory, exist_ok=True)
-
         filename = f"{self.filename}.md"
-        with open(output_directory + "/" + filename, 'w', encoding="utf-8") as file:
-            file.write(self.markdown)
+
+        if self.split_output:
+            output_directory_split = f"{output_directory}\\{self.filename}"
+            os.makedirs(output_directory_split, exist_ok=True)
+            with open(output_directory_split + "/" + filename, 'w', encoding="utf-8") as file:
+                file.write(self.markdown)
+        else:
+            with open(output_directory + "/" + filename, 'w', encoding="utf-8") as file:
+                file.write(self.markdown)        
 
     def move_to_done(self, done_directory: str) -> None:
         os.makedirs(done_directory, exist_ok=True)
 
         done_file_abs = f"{done_directory}\\{self.filename}.docx"
         os.rename(self.filepath_abs, done_file_abs)
-
-
-
-def convert_image(image):
-    image_folder = ".attachments" # Needs to be set to root, once deployed to DevOps - Absolute path is needed
-    output_dir = f"output\\.attachments"
-
-    os.makedirs(output_dir, exist_ok=True)
     
-    unique_name = uuid.uuid4()
-    image_path = os.path.join(image_folder, f"image-{unique_name}.png")
-    output_path = os.path.join(output_dir, f"image-{unique_name}.png")
-    
-    with image.open() as image_bytes:
-        with open(output_path, 'wb') as f:
-            f.write(image_bytes.read())
-    
-    return {
-        "src": image_path
-    }
+    def convert_image(self, image):
+        image_folder = ".attachments" # Needs to be set to root, once deployed to DevOps - Absolute path is needed
+        if self.split_output:
+            output_dir = f"output\\{self.filename}\\.attachments"
+        else:
+            output_dir = f"output\\.attachments"
+
+        os.makedirs(output_dir, exist_ok=True)
+        
+        unique_name = uuid.uuid4()
+        image_path = os.path.join(image_folder, f"image-{unique_name}.png")
+        output_path = os.path.join(output_dir, f"image-{unique_name}.png")
+        
+        with image.open() as image_bytes:
+            with open(output_path, 'wb') as f:
+                f.write(image_bytes.read())
+        
+        return {
+            "src": image_path
+        }
 
 
 

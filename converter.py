@@ -7,14 +7,14 @@ from modules.pdf2docx_converter import Pdf2DocxConverter
 
 
 
-def convert_docx2md(input_directory: str, output_directory: str) -> None:
+def convert_docx2md(input_directory: str, output_directory: str, split_output: bool = False) -> None:
     input_directory_abs = os.path.abspath(input_directory)
     done_directory_abs = f"{input_directory_abs}\\done"
 
     paths = glob(f"{input_directory_abs}\\*.docx", recursive=False)
 
     for path in paths:
-        converter = Docx2MdConverter(path)
+        converter = Docx2MdConverter(path, split_output)
         converter.save(output_directory)
         converter.move_to_done(done_directory_abs)
 
@@ -71,7 +71,7 @@ def main():
     create_folder_structure()
     convert_doc2docx(input_directory = "input\\doc", output_directory = "input\\docx")
     convert_pdf2docx(input_directory = "input\\pdf", output_directory = "input\\docx")
-    convert_docx2md(input_directory = "input\\docx", output_directory = "output")
+    convert_docx2md(input_directory = "input\\docx", output_directory = "output", split_output = True)
 
 
 
