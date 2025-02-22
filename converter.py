@@ -3,10 +3,24 @@ import time
 from glob import glob
 from modules.docx2md_converter import Docx2MdConverter
 from modules.doc2docx_converter import Doc2DocxConverter
+from modules.pdf2docx_converter import Pdf2DocxConverter
 
 
 
-def create_markdown(input_directory: str, output_directory: str) -> None:
+def convert_pdf2docx(input_directory: str, output_directory: str) -> None:
+    input_directory_abs = os.path.abspath(input_directory)
+    output_directory_abs = os.path.abspath(output_directory)
+    done_directory_abs = f"{input_directory_abs}\\done"
+
+    paths = glob(f"{input_directory_abs}\\*.pdf", recursive=False)
+
+    for path in paths:
+        converter = Pdf2DocxConverter(path)
+        converter.convert_and_save(output_directory_abs)
+        converter.move_to_done(done_directory_abs)
+
+
+def convert_docx2md(input_directory: str, output_directory: str) -> None:
     input_directory_abs = os.path.abspath(input_directory)
     done_directory_abs = f"{input_directory_abs}\\done"
 
@@ -20,7 +34,7 @@ def create_markdown(input_directory: str, output_directory: str) -> None:
     print("All docx files converted to markdown")
             
 
-def create_docx(input_directory: str, output_directory: str) -> None:    
+def convert_doc2docx(input_directory: str, output_directory: str) -> None:    
     while True:
         try:
             input_directory_abs = os.path.abspath(input_directory)
@@ -43,8 +57,9 @@ def create_docx(input_directory: str, output_directory: str) -> None:
 
 
 def main():
-    create_docx(input_directory = "input\\doc", output_directory = "input\\docx")
-    create_markdown(input_directory = "input\\docx", output_directory = "output")
+    convert_doc2docx(input_directory = "input\\doc", output_directory = "input\\docx")
+    convert_pdf2docx(input_directory = "input\\pdf", output_directory = "input\\docx")
+    convert_docx2md(input_directory = "input\\docx", output_directory = "output")
 
 
 
