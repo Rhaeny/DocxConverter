@@ -16,13 +16,15 @@ class Docx2MdConverter:
             self.markdown = markdownify(html)
 
     def save(self, output_directory: str) -> None:
-        if not os.path.exists(output_directory):
-            os.makedirs(output_directory)
+        os.makedirs(output_directory, exist_ok=True)
+
         filename = f"{self.filename}.md"
         with open(output_directory + "/" + filename, 'w', encoding="utf-8") as file:
             file.write(self.markdown)
 
     def move_to_done(self, done_directory: str) -> None:
+        os.makedirs(done_directory, exist_ok=True)
+
         done_file_abs = f"{done_directory}\\{self.filename}.docx"
         os.rename(self.filepath_abs, done_file_abs)
 
@@ -30,7 +32,7 @@ class Docx2MdConverter:
 
 def convert_image(image):
     image_folder = ".attachments" # Needs to be set to root, once deployed to DevOps - Absolute path is needed
-    output_dir = f"output\\{image_folder}"
+    output_dir = f"output\\.attachments"
 
     os.makedirs(output_dir, exist_ok=True)
     

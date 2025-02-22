@@ -11,6 +11,8 @@ class Doc2DocxConverter():
         self.filename = os.path.split(filepath_abs)[1]
 
     def convert_and_save(self, output_directory: str) -> None:
+        os.makedirs(output_directory, exist_ok=True)
+
         word = win32.gencache.EnsureDispatch('Word.Application')
         doc = word.Documents.Open(self.filepath_abs)
         doc.Activate()
@@ -25,6 +27,8 @@ class Doc2DocxConverter():
         word.Quit()
     
     def move_to_done(self, done_directory: str) -> None:
+        os.makedirs(done_directory, exist_ok=True)
+
         done_file_abs = f"{done_directory}\\{self.filename}"
         os.rename(self.filepath_abs, done_file_abs)
 
