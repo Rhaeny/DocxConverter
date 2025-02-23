@@ -10,6 +10,7 @@ class Doc2DocxConverter():
         self.filepath_abs = filepath_abs
         self.filename = os.path.split(filepath_abs)[1]
 
+
     def convert_and_save(self, output_directory: str) -> None:
         os.makedirs(output_directory, exist_ok=True)
 
@@ -25,7 +26,8 @@ class Doc2DocxConverter():
         )
         doc.Close(True)
         word.Quit()
-    
+
+
     def move_to_done(self, done_directory: str) -> None:
         os.makedirs(done_directory, exist_ok=True)
 

@@ -17,31 +17,35 @@ class Docx2MdConverter:
             html = result.value
             self.markdown = markdownify(html)
 
+
     def save(self, output_directory: str) -> None:
         os.makedirs(output_directory, exist_ok=True)
-        filename = f"{self.filename}.md"
+        filename = self.filename.replace(" ", "_")
 
         if self.split_output:
-            output_directory_split = f"{output_directory}\\{self.filename}"
+            output_directory_split = f"{output_directory}\\{filename}"
             os.makedirs(output_directory_split, exist_ok=True)
-            with open(output_directory_split + "/" + filename, 'w', encoding="utf-8") as file:
+            with open(output_directory_split + "/" + filename + ".md", 'w', encoding="utf-8") as file:
                 file.write(self.markdown)
         else:
-            with open(output_directory + "/" + filename, 'w', encoding="utf-8") as file:
+            with open(output_directory + "/" + filename + ".md", 'w', encoding="utf-8") as file:
                 file.write(self.markdown)        
+
 
     def move_to_done(self, done_directory: str) -> None:
         os.makedirs(done_directory, exist_ok=True)
 
         done_file_abs = f"{done_directory}\\{self.filename}.docx"
         os.rename(self.filepath_abs, done_file_abs)
-    
+
+
     def convert_image(self, image):
-        image_folder = ".attachments" # Needs to be set to root, once deployed to DevOps - Absolute path is needed
+        filename = self.filename.replace(" ", "_")
+        image_folder = f".attachments\\{filename}"
         if self.split_output:
-            output_dir = f"output\\{self.filename}\\.attachments"
+            output_dir = f"output\\{filename}\\.attachments\\{filename}"
         else:
-            output_dir = f"output\\.attachments"
+            output_dir = f"output\\.attachments\\{filename}"
 
         os.makedirs(output_dir, exist_ok=True)
         

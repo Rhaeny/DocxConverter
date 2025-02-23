@@ -9,6 +9,7 @@ class Pdf2DocxConverter:
         self.filepath_abs = filepath_abs
         self.filename = os.path.split(filepath_abs)[1]
 
+
     def convert_and_save(self, output_directory: str) -> None:
         docx_file_abs = f"{output_directory}\\{self.filename}"
         docx_file_abs = re.sub(r'\.\w+$', '.docx', docx_file_abs)
@@ -16,7 +17,8 @@ class Pdf2DocxConverter:
         cv = Converter(self.filepath_abs)
         cv.convert(docx_file_abs)
         cv.close()
-    
+
+
     def move_to_done(self, done_directory: str) -> None:
         os.makedirs(done_directory, exist_ok=True)
 

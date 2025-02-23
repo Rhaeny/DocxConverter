@@ -57,6 +57,7 @@ def convert_pdf2docx(input_directory: str, output_directory: str) -> None:
     
     print("All pdf files converted to docx")
 
+
 def convert_pptx2pdf(input_directory: str, output_directory: str) -> None:
     input_directory_abs = os.path.abspath(input_directory)
     output_directory_abs = os.path.abspath(output_directory)
@@ -88,7 +89,7 @@ def main():
     convert_doc2docx(input_directory = "input\\doc", output_directory = "input\\docx")
     convert_pptx2pdf(input_directory = "input\\pptx", output_directory = "input\\pdf")
     convert_pdf2docx(input_directory = "input\\pdf", output_directory = "input\\docx")
-    convert_docx2md(input_directory = "input\\docx", output_directory = "output", split_output = True)
+    convert_docx2md(input_directory = "input\\docx", output_directory = "output", split_output = False)
 
 
 
