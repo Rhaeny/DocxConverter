@@ -1,3 +1,4 @@
+import getopt, sys
 import os
 import time
 from glob import glob
@@ -85,11 +86,30 @@ def create_folder_structure():
 
 
 def main():
+    argumentList = sys.argv[1:]
+    options = "hs:"
+    long_options = ["Help", "Split_Output"]
+
+    split_output = False
+
+    try:
+        arguments, _ = getopt.getopt(argumentList, options, long_options)
+        for currentArgument, currentValue in arguments:
+            if currentArgument in ("-h", "--Help"):
+                print ("Parameters:\n\t-s --Split_Output: bool (If set to True, splits all output markdown files into separate folders. Default: False)")
+                sys.exit()   
+            elif currentArgument in ("-s", "--Split_Output"):
+                print ("Split output set to", currentValue)
+                split_output = bool(currentValue)
+    except getopt.error as err:
+        print (str(err))
+        sys.exit()
+
     create_folder_structure()
     convert_doc2docx(input_directory = "input\\doc", output_directory = "input\\docx")
     convert_pptx2pdf(input_directory = "input\\pptx", output_directory = "input\\pdf")
     convert_pdf2docx(input_directory = "input\\pdf", output_directory = "input\\docx")
-    convert_docx2md(input_directory = "input\\docx", output_directory = "output", split_output = False)
+    convert_docx2md(input_directory = "input\\docx", output_directory = "output", split_output = split_output)
 
 
 
